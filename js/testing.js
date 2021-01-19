@@ -103,3 +103,8 @@ for (i=0; i<n_balls; i++){
 
 balls.forEach(item => item.draw());
 
+console.log("FINISHED");
+// create an array and a matrix
+const array = [[2, 0], [-1, 3]];               // Array
+const matrix = math.matrix([[7, 1], [-2, 3]]); // Matrix
+console.log(matrix[0][0]);
