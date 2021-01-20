@@ -2,7 +2,7 @@ var canvas = document.getElementById('canvas');
 var ctx = canvas.getContext('2d');
 var raf;
 
-var dt = 0.000002;
+var dt = 1;
 var vec_field = create_vector_field(canvas.height, canvas.width);
 
 // A class describing a particle
@@ -65,7 +65,6 @@ function draw() {
   })
 }
 
-var C = 0.00000000001;
 function create_vector_field(n_rows, n_cols) {
   var vector_field = [];
   let center = [Math.floor(n_cols/2), Math.floor(n_rows/2)];
@@ -74,15 +73,16 @@ function create_vector_field(n_rows, n_cols) {
     for (ci=0; ci<n_cols; ci++) {
       let dx = center[0] - ci;
       let dy = center[1] - ri;
-      let r2 = Math.sqrt(dx*dx + dy*dy);
-      r2 /= 10000000000;
+      let r2 = dx*dx + dy*dy;
 
       if (r2 == 0) {
         vector_row.push([0, 0]);
       } 
       else {
-        let vx = C/r2;
-        let vy = C/r2;
+        let rx = Math.round(Math.random()) ? 1 : -1;
+        let ry = Math.round(Math.random()) ? 1 : -1;
+        let vx = Math.random()*5 * rx;
+        let vy = Math.random()*5 * ry;
         vector_row.push([vx, vy]);
       }
     }
