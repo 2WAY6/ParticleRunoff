@@ -31,7 +31,10 @@ function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   
   balls.forEach(function(ball, index) {
-    ball.draw(ctx);
+    if (ball.x > 0 || ball.x < canvas.width || ball.y > 0 || ball.y < canvas.height) {
+      ball.draw(ctx);
+    }
+    // ball.draw(ctx);
     let ci = Math.floor(ball.x);
     let ri = Math.floor(ball.y);
 
@@ -48,20 +51,22 @@ function draw() {
       ri = 0;
     }
 
-    ball.vx = vec_field[ri][ci][0];
-    ball.vy = vec_field[ri][ci][1];
+    // ball.vx = vec_field[ri][ci][0];
+    // ball.vy = vec_field[ri][ci][1];
+    ball.vx = (ball.vx + vec_field[ri][ci][0]);
+    ball.vy = (ball.vy + vec_field[ri][ci][1]);
 
     // ball.x += 0.05;
     // ball.y += 0.05;
     ball.x += ball.vx * dt;
     ball.y += ball.vy * dt;
 
-    if (ball.y >= canvas.height || ball.y <= 0) {
-      ball.y = Math.random() * canvas.height;
-    }
-    if (ball.x >= canvas.width || ball.x <= 0) {
-      ball.x = Math.random() * canvas.width;
-    }
+    // if (ball.y >= canvas.height || ball.y <= 0) {
+    //   ball.y = Math.random() * canvas.height;
+    // }
+    // if (ball.x >= canvas.width || ball.x <= 0) {
+    //   ball.x = Math.random() * canvas.width;
+    // }
   })
 }
 
@@ -73,16 +78,19 @@ function create_vector_field(n_rows, n_cols) {
     for (ci=0; ci<n_cols; ci++) {
       let dx = center[0] - ci;
       let dy = center[1] - ri;
-      let r2 = dx*dx + dy*dy;
+      let r = Math.sqrt(dx*dx + dy*dy);
 
-      if (r2 == 0) {
+      if (r == 0) {
         vector_row.push([0, 0]);
       } 
       else {
-        let rx = Math.round(Math.random()) ? 1 : -1;
-        let ry = Math.round(Math.random()) ? 1 : -1;
-        let vx = Math.random()*5 * rx;
-        let vy = Math.random()*5 * ry;
+        // let rx = Math.round(Math.random()) ? 1 : -1;
+        // let ry = Math.round(Math.random()) ? 1 : -1;
+        // let vx = Math.random()*5 * rx;
+        // let vy = Math.random()*5 * ry;
+        let C = 0.01;
+        let vx = C * dx / r;
+        let vy = C * dy / r; 
         vector_row.push([vx, vy]);
       }
     }
@@ -96,13 +104,15 @@ var intervalID = window.setInterval(draw, 0.01);
 
 
 var balls = []
-var n_balls = 10;
+var n_balls = 60;
 for (i=0; i<n_balls; i++){
+  let rndx = Math.round(Math.random()) ? 1 : -1;
+  let rndy = Math.round(Math.random()) ? 1 : -1;
   var ball = new Particle(1,
                           Math.random()*canvas.width,
-                          Math.random()*canvas.height,
-                          Math.random()*0,
-                          Math.random()*0,
+                          Math.random()*canvas.height * 0 + 400, 
+                          rndx * Math.random()*0,
+                          rndy * Math.random()*1,
                           3 + Math.random()*3);
   balls.push(ball);
 }
